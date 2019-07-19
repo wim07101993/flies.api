@@ -3,11 +3,26 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/rs/cors"
-	"github.com/wim07101993/fly-swatting-contest.api/participants"
+	"github.com/wim07101993/fly_swatting_contest/api/participants"
 )
+
+func getSettings(path string) Settings {
+	var s Settings
+
+	if path == "" {
+		s = CreateDefaultSettings()
+	} else {
+		s = readSettingsFromFile(os.Args[1])
+	}
+
+	log.Println("File set to:", s.ParticiPantsFilePath)
+
+	return s
+}
 
 func createRouter(c participants.Controller) *httprouter.Router {
 	r := httprouter.New()
@@ -42,8 +57,10 @@ func addCorsToHandler(h http.Handler) http.Handler {
 }
 
 func main() {
+	// read program args
+	p := getProgramArgs()
 	// create settings
-	set := CreateDefaultSettings()
+	set := getSettings(p.settingFilePath)
 
 	// create service
 	s := participants.NewService(set.ParticiPantsFilePath)
