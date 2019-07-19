@@ -1,8 +1,11 @@
 package participants
 
 import (
+	"encoding/json"
 	"errors"
+	"log"
 	"math"
+	"net/http"
 	"unicode"
 )
 
@@ -69,4 +72,35 @@ func findParticipant(id uint32, participants []Participant) int {
 func removeAt(ps []Participant, i int) []Participant {
 	ps[i] = ps[len(ps)-1]
 	return ps[:len(ps)-1]
+}
+
+func checkError(w http.ResponseWriter, err error) bool {
+	if err == nil {
+		return false
+	}
+
+	errMes := err.Error()
+	log.Println("\tError:", errMes)
+
+	if errMes == ParticipantNotFoundErrorMessage {
+		http.Error(w, errMes, http.StatusNotFound)
+	} else if errMes == NameAlreadyTakenErrorMessage ||
+		errMes == BadJsonErrorMessage ||
+		errMes == NameCannotBeEmptyErrorMessage {
+		http.Error(w, errMes, http.StatusBadRequest)
+	} else {
+		http.Error(w, errMes, http.StatusInternalServerError)
+	}
+
+	return true
+}
+
+func writeJson(w http.ResponseWriter, v interface{}) {
+	jv, err := json.Marshal(v)
+	if checkError(w, err) {
+		return
+	}
+
+	w.Header().Set("content-type", "application/json")
+	w.Write(jv)
 }
