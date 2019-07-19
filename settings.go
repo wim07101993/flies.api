@@ -29,6 +29,7 @@ func readSettingsFromFile(filePath string) Settings {
 
 	var settings Settings
 	err = json.Unmarshal(bsettings, &settings)
+
 	if err != nil {
 		panic(err)
 	}

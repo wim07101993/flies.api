@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/rs/cors"
@@ -16,7 +15,7 @@ func getSettings(path string) Settings {
 	if path == "" {
 		s = CreateDefaultSettings()
 	} else {
-		s = readSettingsFromFile(os.Args[1])
+		s = readSettingsFromFile(path)
 	}
 
 	log.Println("File set to:", s.ParticiPantsFilePath)
