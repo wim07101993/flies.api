@@ -6,7 +6,7 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/rs/cors"
-	"github.com/wim07101993/fly_swatting_contest/api/participants"
+	"github.com/wim07101993/fly-swatting-contest.api/participants"
 )
 
 func createRouter(c participants.Controller) *httprouter.Router {
@@ -42,8 +42,11 @@ func addCorsToHandler(h http.Handler) http.Handler {
 }
 
 func main() {
+	// create settings
+	set := CreateDefaultSettings()
+
 	// create service
-	s := participants.NewService("settings.json")
+	s := participants.NewService(set.ParticiPantsFilePath)
 	// create controller
 	c := participants.NewController(s)
 	// create router
@@ -53,6 +56,6 @@ func main() {
 	handler := addCorsToHandler(r)
 
 	// start serving
-	log.Println("Start listening at 0.0.0.0:5000")
-	log.Fatal(http.ListenAndServe("0.0.0.0:5000", handler))
+	log.Println("Start listening at", set.IpAddress+":"+set.PortNumber)
+	log.Fatal(http.ListenAndServe(set.IpAddress+":"+set.PortNumber, handler))
 }
