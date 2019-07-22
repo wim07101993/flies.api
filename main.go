@@ -6,7 +6,7 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/rs/cors"
-	"github.com/wim07101993/fly_swatting_contest/api/participants"
+	"github.com/wim07101993/fly-swatting-contest.api/participants"
 )
 
 func getSettings(path string) Settings {
