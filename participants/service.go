@@ -156,6 +156,6 @@ func (pc *Service) writeFile(ps []Participant) error {
 		return err
 	}
 
-	err = ioutil.WriteFile(pc.filePath, jps, 664)
+	err = ioutil.WriteFile(pc.filePath, jps, 755)
 	return err
 }
