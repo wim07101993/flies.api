@@ -7,14 +7,14 @@ import (
 )
 
 type Settings struct {
-	ParticiPantsFilePath string `json:"particiPantsFilePath"`
+	ParticipantsFilePath string `json:"participantsFilePath"`
 	PortNumber           string `json:"portNumber"`
 	IpAddress            string `json:"ipAddress"`
 }
 
 func CreateDefaultSettings() Settings {
 	return Settings{
-		ParticiPantsFilePath: "participants.json",
+		ParticipantsFilePath: "participants.json",
 		PortNumber:           "5000",
 		IpAddress:            "",
 	}

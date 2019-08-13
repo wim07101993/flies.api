@@ -18,7 +18,7 @@ func getSettings(path string) Settings {
 		s = readSettingsFromFile(path)
 	}
 
-	log.Println("File set to:", s.ParticiPantsFilePath)
+	log.Println("File set to:", s.ParticipantsFilePath)
 
 	return s
 }
@@ -62,7 +62,7 @@ func main() {
 	set := getSettings(p.settingFilePath)
 
 	// create service
-	s := participants.NewService(set.ParticiPantsFilePath)
+	s := participants.NewService(set.ParticipantsFilePath)
 	// create controller
 	c := participants.NewController(s)
 	// create router
