@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io/ioutil"
 	"os"
+	"sort"
 )
 
 const (
@@ -50,7 +51,12 @@ func (pc *Service) Create(p Participant) (Participant, error) {
 }
 
 func (pc *Service) GetAll() ([]Participant, error) {
-	return pc.readFile()
+	ps, err := pc.readFile()
+	if err != nil {
+		return nil, err
+	}
+	sort.Slice(ps, func(i, j int) bool { return ps[i].Score > ps[j].Score })
+	return ps, nil
 }
 
 func (pc *Service) Get(id uint32) (Participant, error) {
