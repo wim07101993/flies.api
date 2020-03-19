@@ -38,25 +38,24 @@ func createRouter(c participants.Controller) *httprouter.Router {
 	r := httprouter.New()
 
 	r.POST("/api/participants", c.Create)
-	r.POST("/api/"+participants.YearParameter+"/participants", c.Create)
+	r.POST("/api/:"+participants.YearParameter+"/participants", c.Create)
 
 	r.GET("/api/participants/", c.GetAll)
-	r.GET("/api/"+participants.YearParameter+"/participants/", c.GetAll)
+	r.GET("/api/:"+participants.YearParameter+"/participants/", c.GetAll)
 	r.GET("/api/participants/:"+participants.IdParameter, c.Get)
-	r.GET("/api/"+participants.YearParameter+"/participants/:"+participants.IdParameter, c.Get)
+	r.GET("/api/:"+participants.YearParameter+"/participants/:"+participants.IdParameter, c.Get)
 
 	r.PUT("/api/participants/:"+participants.IdParameter+"/score", c.UpdateScore)
+	r.PUT("/api/:"+participants.YearParameter+"/participants/:"+participants.IdParameter+"/score", c.UpdateScore)
 	r.PUT("/api/participants/:"+participants.IdParameter+"/increaseScore", c.IncreaseScore)
+	r.PUT("/api/:"+participants.YearParameter+"/participants/:"+participants.IdParameter+"/increaseScore", c.IncreaseScore)
 	r.PUT("/api/participants/:"+participants.IdParameter+"/name", c.UpdateName)
+	r.PUT("/api/:"+participants.YearParameter+"/participants/:"+participants.IdParameter+"/name", c.UpdateName)
 	r.PUT("/api/participants/:"+participants.IdParameter+"/decreaseScore", c.DecreaseScore)
-
-	r.PUT("/api/"+participants.YearParameter+"/participants/:"+participants.IdParameter+"/score", c.UpdateScore)
-	r.PUT("/api/"+participants.YearParameter+"/participants/:"+participants.IdParameter+"/increaseScore", c.IncreaseScore)
-	r.PUT("/api/"+participants.YearParameter+"/participants/:"+participants.IdParameter+"/name", c.UpdateName)
-	r.PUT("/api/"+participants.YearParameter+"/participants/:"+participants.IdParameter+"/decreaseScore", c.DecreaseScore)
+	r.PUT("/api/:"+participants.YearParameter+"/participants/:"+participants.IdParameter+"/decreaseScore", c.DecreaseScore)
 
 	r.DELETE("/api/participants/:"+participants.IdParameter, c.Delete)
-	r.DELETE("/api/"+participants.YearParameter+"/participants/:"+participants.IdParameter, c.Delete)
+	r.DELETE("/api/:"+participants.YearParameter+"/participants/:"+participants.IdParameter, c.Delete)
 
 	return r
 }
