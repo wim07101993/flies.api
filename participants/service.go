@@ -170,6 +170,6 @@ func (pc *Service) writeFile(year int, ps []Participant) error {
 	}
 
 	path := pc.directory + BaseFileName + strconv.Itoa(year) + Extension
-	err = ioutil.WriteFile(path, jps, 755)
+	err = ioutil.WriteFile(path, jps, 777)
 	return err
 }

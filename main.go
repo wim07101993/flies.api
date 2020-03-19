@@ -3,11 +3,22 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/rs/cors"
 	"github.com/wim07101993/flies.api/participants"
 )
+
+func setupLogging() {
+	f, err := os.OpenFile("flies.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Println("Failed to open log file")
+	}
+	defer f.Close()
+
+	log.SetOutput(f)
+}
 
 func getSettings(path string) Settings {
 	var s Settings
@@ -65,6 +76,9 @@ func addCorsToHandler(h http.Handler) http.Handler {
 }
 
 func main() {
+	// set up te loggin
+	setupLogging()
+
 	// read program args
 	p := getProgramArgs()
 	// create settings
