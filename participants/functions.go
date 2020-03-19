@@ -6,7 +6,11 @@ import (
 	"log"
 	"math"
 	"net/http"
+	"strconv"
+	"time"
 	"unicode"
+
+	"github.com/julienschmidt/httprouter"
 )
 
 const (
@@ -103,4 +107,12 @@ func writeJson(w http.ResponseWriter, v interface{}) {
 
 	w.Header().Set("content-type", "application/json")
 	w.Write(jv)
+}
+
+func getYear(ps httprouter.Params) int {
+	sYear := ps.ByName(YearParameter)
+	if i, err := strconv.ParseUint(sYear, 10, 32); err == nil {
+		return int(i)
+	}
+	return time.Now().Year()
 }

@@ -20,6 +20,7 @@ const (
 	AmountParameter       = "amount"
 	ScoreParameter        = "score"
 	NewNameParamter       = "newName"
+	YearParameter         = "year"
 )
 
 type Controller struct {
@@ -47,7 +48,8 @@ func (pc *Controller) Create(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-	p, err = pc.service.Create(p)
+	year := getYear(ps)
+	p, err = pc.service.Create(year, p)
 	if checkError(w, err) {
 		return
 	}
@@ -56,9 +58,10 @@ func (pc *Controller) Create(w http.ResponseWriter, r *http.Request, ps httprout
 	writeJson(w, p)
 }
 
-func (pc *Controller) GetAll(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func (pc *Controller) GetAll(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	logRequest("GetAll", r)
-	ps, err := pc.service.GetAll()
+	year := getYear(p)
+	ps, err := pc.service.GetAll(year)
 	if checkError(w, err) {
 		return
 	}
@@ -75,7 +78,8 @@ func (pc *Controller) Get(w http.ResponseWriter, r *http.Request, ps httprouter.
 		return
 	}
 
-	p, err := pc.service.Get(uint32(id))
+	year := getYear(ps)
+	p, err := pc.service.Get(year, uint32(id))
 	if checkError(w, err) {
 		return
 	}
@@ -99,7 +103,8 @@ func (pc *Controller) IncreaseScore(w http.ResponseWriter, r *http.Request, ps h
 		return
 	}
 
-	p, err := pc.service.IncreaseScore(uint32(id), uint16(amount))
+	year := getYear(ps)
+	p, err := pc.service.IncreaseScore(year, uint32(id), uint16(amount))
 	if checkError(w, err) {
 		return
 	}
@@ -123,7 +128,8 @@ func (pc *Controller) DecreaseScore(w http.ResponseWriter, r *http.Request, ps h
 		return
 	}
 
-	p, err := pc.service.DecreaseScore(uint32(id), uint16(amount))
+	year := getYear(ps)
+	p, err := pc.service.DecreaseScore(year, uint32(id), uint16(amount))
 	if checkError(w, err) {
 		return
 	}
@@ -147,7 +153,8 @@ func (pc *Controller) UpdateScore(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
-	p, err := pc.service.UpdateScore(uint32(id), uint16(score))
+	year := getYear(ps)
+	p, err := pc.service.UpdateScore(year, uint32(id), uint16(score))
 	if checkError(w, err) {
 		return
 	}
@@ -164,8 +171,9 @@ func (pc *Controller) UpdateName(w http.ResponseWriter, r *http.Request, ps http
 		return
 	}
 
+	year := getYear(ps)
 	newName := r.URL.Query().Get(NewNameParamter)
-	p, err := pc.service.UpdateName(uint32(id), newName)
+	p, err := pc.service.UpdateName(year, uint32(id), newName)
 	if checkError(w, err) {
 		return
 	}
@@ -182,7 +190,8 @@ func (pc *Controller) Delete(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-	err = pc.service.Delete(uint32(id))
+	year := getYear(ps)
+	err = pc.service.Delete(year, uint32(id))
 	if checkError(w, err) {
 		return
 	}
