@@ -10,14 +10,14 @@ import (
 	"github.com/wim07101993/flies.api/participants"
 )
 
-func setupLogging() {
+func setupLogging() func() {
 	f, err := os.OpenFile("flies.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0755)
 	if err != nil {
 		log.Println("Failed to open log file")
 	}
-	//defer f.Close()
 
 	log.SetOutput(f)
+	return func() { f.Close() }
 }
 
 func getSettings(path string) Settings {
@@ -68,7 +68,8 @@ func addCorsToHandler(h http.Handler) http.Handler {
 
 func main() {
 	// set up te loggin
-	setupLogging()
+	f := setupLogging()
+	defer f()
 
 	// read program args
 	p := getProgramArgs()
